@@ -15,23 +15,22 @@
  */
 package com.redhat.ldemasi.examples;
 
-import javax.management.NotCompliantMBeanException;
-import javax.management.StandardMBean;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jmx.export.annotation.ManagedAttribute;
+import org.springframework.jmx.export.annotation.ManagedResource;
+import org.springframework.stereotype.Component;
 
-public class MyCustomImplMBean extends StandardMBean implements MyCustomMBean {
+@Component
+@ManagedResource(objectName="com.redhat.ldemasi.examples:type=config,name=amqp")
+public class MyCustomImplMBean  {
 
-    private final String brokerUrl;
+    @Value("${qpid.remoteURI}")
+    private String brokerUrl;
 
-    protected MyCustomImplMBean() throws NotCompliantMBeanException {
-        this(null);
+    public MyCustomImplMBean(){
     }
 
-    public MyCustomImplMBean(final String brokerUrl)
-            throws NotCompliantMBeanException {
-        super(MyCustomMBean.class);
-        this.brokerUrl =  brokerUrl;
-    }
-
+    @ManagedAttribute
     public String getBrokerUrl() {
         return brokerUrl;
     }
